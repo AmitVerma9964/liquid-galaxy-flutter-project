@@ -1,0 +1,263 @@
+
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() => runApp(const LgApp());
+
+class LgApp extends StatelessWidget {
+const LgApp({super.key});
+
+@override
+Widget build(BuildContext context) {
+return MaterialApp(
+debugShowCheckedModeBanner: false,
+theme: ThemeData.dark(),
+home: const OrbitScreen(),
+);
+}
+}
+
+class OrbitScreen extends StatefulWidget {
+const OrbitScreen({super.key});
+
+@override
+State<OrbitScreen> createState() => _OrbitScreenState();
+}
+
+class _OrbitScreenState extends State<OrbitScreen>
+with TickerProviderStateMixin {
+late AnimationController orbitController;
+late AnimationController glowController;
+
+// 🔌 Connection state
+bool isConnected = false;
+String statusMessage = 'Disconnected';
+
+// 🔐 Credentials
+final TextEditingController ipController =
+TextEditingController();
+final TextEditingController userController =
+TextEditingController();
+final TextEditingController passController =
+TextEditingController();
+final TextEditingController portController =
+TextEditingController(text: '22');
+
+@override
+void initState() {
+super.initState();
+
+    orbitController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 12),
+    )..repeat();
+
+    glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+}
+
+@override
+void dispose() {
+orbitController.dispose();
+glowController.dispose();
+ipController.dispose();
+userController.dispose();
+passController.dispose();
+portController.dispose();
+super.dispose();
+}
+
+// ✅ IP validation
+bool isValidIp(String ip) {
+final regex = RegExp(
+r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}'
+r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+);
+return regex.hasMatch(ip);
+}
+
+// 🔌 CONNECT (mock – ready for real SSH)
+void connect() {
+final ip = ipController.text.trim();
+final user = userController.text.trim();
+final pass = passController.text;
+final port = portController.text.trim();
+
+    if (!isValidIp(ip) || user.isEmpty || pass.isEmpty || port.isEmpty) {
+      setState(() {
+        statusMessage = '❌ Invalid connection details';
+        isConnected = false;
+      });
+      Navigator.pop(context);
+      return;
+    }
+
+    setState(() {
+      isConnected = true;
+      statusMessage = '✅ Connected to $ip:$port as $user';
+    });
+
+    Navigator.pop(context);
+}
+
+// 🔌 DISCONNECT
+void disconnect() {
+setState(() {
+isConnected = false;
+statusMessage = 'Disconnected';
+});
+}
+
+// ⚙️ Connection dialog
+void showConnectionDialog() {
+showDialog(
+context: context,
+builder: (_) => AlertDialog(
+title: const Text('Liquid Galaxy Connection'),
+content: SingleChildScrollView(
+child: Column(
+children: [
+TextField(
+controller: ipController,
+decoration: const InputDecoration(labelText: 'IP Address'),
+),
+TextField(
+controller: portController,
+decoration: const InputDecoration(labelText: 'Port'),
+keyboardType: TextInputType.number,
+),
+TextField(
+controller: userController,
+decoration: const InputDecoration(labelText: 'Username'),
+),
+TextField(
+controller: passController,
+decoration: const InputDecoration(labelText: 'Password'),
+obscureText: true,
+),
+],
+),
+),
+actions: [
+TextButton(
+onPressed: () => Navigator.pop(context),
+child: const Text('Cancel'),
+),
+ElevatedButton(
+onPressed: connect,
+child: const Text('Connect'),
+),
+],
+),
+);
+}
+
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+backgroundColor: Colors.black,
+appBar: AppBar(
+title: const Text('Orbital Earth – LG Controller 🌍'),
+centerTitle: true,
+actions: [
+// ⋮ THREE DOT MENU
+PopupMenuButton<String>(
+onSelected: (value) {
+if (value == 'connect') showConnectionDialog();
+if (value == 'disconnect') disconnect();
+},
+itemBuilder: (context) => [
+const PopupMenuItem(
+value: 'connect',
+child: Text('🔌 Connect'),
+),
+const PopupMenuItem(
+value: 'disconnect',
+child: Text('❌ Disconnect'),
+),
+],
+),
+],
+),
+
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: AnimatedBuilder(
+                animation:
+                Listenable.merge([orbitController, glowController]),
+                builder: (_, __) {
+                  final a = orbitController.value * 2 * pi;
+                  final glow = 0.4 + glowController.value * 0.4;
+
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 220,
+                        height: 220,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blueAccent.withOpacity(glow),
+                              blurRadius: 40,
+                              spreadRadius: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Text('🌍',
+                          style: TextStyle(fontSize: 90)),
+
+                      Transform.translate(
+                        offset:
+                        Offset(140 * cos(a), 80 * sin(a)),
+                        child: const Text('🛰️',
+                            style: TextStyle(fontSize: 26)),
+                      ),
+
+                      Transform.translate(
+                        offset: Offset(
+                            90 * cos(a + pi / 2),
+                            120 * sin(a + pi / 2)),
+                        child: const Text('🪐',
+                            style: TextStyle(fontSize: 28)),
+                      ),
+
+                      Transform.translate(
+                        offset:
+                        Offset(170 * cos(a + pi), 40 * sin(a + pi)),
+                        child: const Text('🌕',
+                            style: TextStyle(fontSize: 22)),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+
+          // 📊 STATUS PANEL
+          Container(
+            padding: const EdgeInsets.all(16),
+            width: double.infinity,
+            color: Colors.grey.shade900,
+            child: Text(
+              statusMessage,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: isConnected ? Colors.green : Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+}
+}
