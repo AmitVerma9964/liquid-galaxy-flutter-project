@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>3D Colored Pyramid - Created by Goutam for LG Task</name>
+    <description>A 3D pyramid with colored faces (Red, Green, Blue, Yellow, Magenta) centered at Indore, India</description>
+    
+    <!-- Styles for different colored faces -->
+    <Style id="redFace">
+      <PolyStyle>
+        <color>7f0000ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <LineStyle>
+        <color>ff000000</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    
+    <Style id="greenFace">
+      <PolyStyle>
+        <color>7f00ff00</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <LineStyle>
+        <color>ff000000</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    
+    <Style id="blueFace">
+      <PolyStyle>
+        <color>7fff0000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <LineStyle>
+        <color>ff000000</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    
+    <Style id="yellowFace">
+      <PolyStyle>
+        <color>7f00ffff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <LineStyle>
+        <color>ff000000</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    
+    <Style id="baseFace">
+      <PolyStyle>
+        <color>7fff00ff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <LineStyle>
+        <color>ff000000</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    
+    <Folder>
+      <name>Pyramid Structure</name>
+      
+      <!-- Base of pyramid (Magenta) -->
+      <Placemark>
+        <name>Base Face (Magenta)</name>
+        <description>Square base of the pyramid</description>
+        <styleUrl>#baseFace</styleUrl>
+        <Polygon>
+          <extrude>0</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                75.8567,22.7186,0
+                75.8587,22.7186,0
+                75.8587,22.7206,0
+                75.8567,22.7206,0
+                75.8567,22.7186,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      
+      <!-- North face (Red) -->
+      <Placemark>
+        <name>North Face (Red)</name>
+        <description>North triangular face of pyramid</description>
+        <styleUrl>#redFace</styleUrl>
+        <Polygon>
+          <extrude>0</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                75.8567,22.7206,0
+                75.8587,22.7206,0
+                75.8577,22.7196,100
+                75.8567,22.7206,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      
+      <!-- East face (Green) -->
+      <Placemark>
+        <name>East Face (Green)</name>
+        <description>East triangular face of pyramid</description>
+        <styleUrl>#greenFace</styleUrl>
+        <Polygon>
+          <extrude>0</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                75.8587,22.7206,0
+                75.8587,22.7186,0
+                75.8577,22.7196,100
+                75.8587,22.7206,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      
+      <!-- South face (Blue) -->
+      <Placemark>
+        <name>South Face (Blue)</name>
+        <description>South triangular face of pyramid</description>
+        <styleUrl>#blueFace</styleUrl>
+        <Polygon>
+          <extrude>0</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                75.8587,22.7186,0
+                75.8567,22.7186,0
+                75.8577,22.7196,100
+                75.8587,22.7186,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      
+      <!-- West face (Yellow) -->
+      <Placemark>
+        <name>West Face (Yellow)</name>
+        <description>West triangular face of pyramid</description>
+        <styleUrl>#yellowFace</styleUrl>
+        <Polygon>
+          <extrude>0</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                75.8567,22.7186,0
+                75.8567,22.7206,0
+                75.8577,22.7196,100
+                75.8567,22.7186,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      
+      <!-- Apex marker -->
+      <Placemark>
+        <name>Pyramid Apex</name>
+        <description>Top point of the pyramid at 100m altitude</description>
+        <Style>
+          <IconStyle>
+            <scale>1.2</scale>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/shapes/star.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>75.8577,22.7196,100</coordinates>
+        </Point>
+      </Placemark>
+      
+    </Folder>
+  </Document>
+</kml>
