@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen>
             elevation: 12,
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            shadowColor: Colors.cyanAccent.withOpacity(0.5),
+            shadowColor: Colors.cyanAccent.withValues(alpha: 0.5),
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.cyanAccent.withOpacity(0.5),
+                                  color: Colors.cyanAccent.withValues(alpha: 0.5),
                                 ),
                               ),
                             ),

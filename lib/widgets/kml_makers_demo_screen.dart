@@ -64,7 +64,7 @@ class _KMLMakersDemoScreenState extends State<KMLMakersDemoScreen> {
   Future<void> _flyToLocation() async {
     setState(() => _isLoading = true);
 
-    final result = await widget.lgService.flyToWithKMLMakers(
+    await widget.lgService.flyToWithKMLMakers(
       latitude: 28.6139,
       longitude: 77.2090,
       zoom: 10000,
@@ -82,7 +82,7 @@ class _KMLMakersDemoScreenState extends State<KMLMakersDemoScreen> {
   Future<void> _flyToInstant() async {
     setState(() => _isLoading = true);
 
-    final result = await widget.lgService.flyToWithKMLMakers(
+    await widget.lgService.flyToWithKMLMakers(
       latitude: 19.0760,
       longitude: 72.8777,
       zoom: 10000,
@@ -100,7 +100,7 @@ class _KMLMakersDemoScreenState extends State<KMLMakersDemoScreen> {
   Future<void> _startOrbit() async {
     setState(() => _isLoading = true);
 
-    final result = await widget.lgService.startOrbitWithKMLMakers(
+    await widget.lgService.startOrbitWithKMLMakers(
       latitude: 22.7196,
       longitude: 75.8577,
       zoom: 10000,
