@@ -1,5 +1,6 @@
 import 'package:dartssh2/dartssh2.dart';
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:amti_fluttter_task1/models/kml/placemark_entity.dart';
 import 'package:amti_fluttter_task1/models/kml/point_entity.dart';
@@ -108,6 +109,53 @@ class LGService {
       return String.fromCharCodes(result);
     } catch (e) {
       return 'Command failed on screen $screen: $e';
+    }
+  }
+
+  /// Upload local logo image to LG and display it on master screen
+  Future<String> sendLocalLogo(Uint8List imageBytes, {int screen = 1}) async {
+    if (_client == null) {
+      return 'Not connected to LG';
+    }
+
+    try {
+      // Step 1: Create images directory on LG
+      await executeCommand('mkdir -p /var/www/html/images');
+      
+      // Step 2: Upload image file to LG using base64 encoding
+      final base64Image = base64Encode(imageBytes);
+      final uploadCommand = "echo '$base64Image' | base64 -d > /var/www/html/images/LIQUIDGALAXYLOGO.png";
+      await executeCommand(uploadCommand);
+      
+      // Step 3: Create KML for screen overlay pointing to the uploaded image
+      final imageUrl = 'http://lg1:81/images/LIQUIDGALAXYLOGO.png';
+      final kml = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>LG Logo</name>
+    <ScreenOverlay>
+      <name>Liquid Galaxy Logo</name>
+      <Icon>
+        <href>$imageUrl</href>
+      </Icon>
+      <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+      <screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+      <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+      <size x="0.2" y="0" xunits="fraction" yunits="fraction"/>
+    </ScreenOverlay>
+  </Document>
+</kml>''';
+      
+      // Step 4: Write KML file
+      final escapedKml = kml.replaceAll("'", "'\\''");
+      await executeCommand("echo '$escapedKml' > /var/www/html/kml/logo.kml");
+      
+      // Step 5: Display on master screen (screen 1 or specified screen)
+      await executeCommand("echo 'http://lg1:81/kml/logo.kml' > /tmp/query.txt");
+      
+      return '✅ Logo uploaded and displayed on LG master screen (Screen $screen)';
+    } catch (e) {
+      return '❌ Failed to send logo: $e';
     }
   }
 

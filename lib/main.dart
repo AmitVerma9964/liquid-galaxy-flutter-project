@@ -1,5 +1,6 @@
-import   'dart:math';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:amti_fluttter_task1/services/lg_service.dart';
 import 'package:amti_fluttter_task1/utils/kml_helper.dart';
 import 'package:amti_fluttter_task1/models/kml/screen_overlay_entity.dart';
@@ -206,7 +207,7 @@ class _LGMenuScreenState extends State<LGMenuScreen> {
     });
   }
 
-  /// Send LG Logo
+  /// Send LG Logo from local assets to LG master machine
   Future<void> sendLogo() async {
     if (!_lgService.isConnected) {
       setState(() {
@@ -214,11 +215,26 @@ class _LGMenuScreenState extends State<LGMenuScreen> {
       });
       return;
     }
-    final logoUrl = KMLHelper.getLGLogoURL();
-    final result = await _lgService.sendLogo(logoUrl);
+    
     setState(() {
-      sshOutput = result;
+      sshOutput = 'Uploading logo to LG master machine...';
     });
+    
+    try {
+      // Load logo from assets
+      final ByteData logoData = await rootBundle.load('assets/images/LIQUIDGALAXYLOGO.png');
+      final Uint8List logoBytes = logoData.buffer.asUint8List();
+      
+      // Send to LG master screen
+      final result = await _lgService.sendLocalLogo(logoBytes, screen: 1);
+      setState(() {
+        sshOutput = result;
+      });
+    } catch (e) {
+      setState(() {
+        sshOutput = '❌ Failed to load or send logo: $e';
+      });
+    }
   }
 
   /// Send Logo using ScreenOverlayEntity
@@ -478,7 +494,7 @@ class _LGMenuScreenState extends State<LGMenuScreen> {
                   ElevatedButton.icon(
                     onPressed: sendLogo,
                     icon: const Icon(Icons.image),
-                    label: const Text('Send LG Logo to Left Screen'),
+                    label: const Text('Send LG Logo to Master Screen'),
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton.icon(
