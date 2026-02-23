@@ -7,10 +7,12 @@ import 'package:amti_fluttter_task1/models/kml/line_entity.dart';
 import 'package:amti_fluttter_task1/models/kml/screen_overlay_entity.dart';
 import 'package:amti_fluttter_task1/utils/kml_makers.dart';
 import 'package:amti_fluttter_task1/utils/orbit_kml.dart';
-import 'package:amti_fluttter_task1/utils/constants.dart';
 
 /// Global instance of [LGService] for easy access throughout the app
 LGService lgService = LGService();
+
+/// URL for the logos to be displayed on Liquid Galaxy
+const String logosUrl = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXmdNgBTXup6bdWew5RzgCmC9pPb7rK487CpiscWB2S8OlhwFHmeeACHIIjx4B5-Iv-t95mNUx0JhB_oATG3-Tq1gs8Uj0-Xb9Njye6rHtKKsnJQJlzZqJxMDnj_2TXX3eA5x6VSgc8aw/s320-rw/LOGO+LIQUID+GALAXY-sq1000-+OKnoline.png';
 
 /// Service class to handle all Liquid Galaxy ssh operations
 class LGService {
